@@ -22,7 +22,7 @@ export default async function AuthLayout({
       console.log('Error fetching user data:', error)
       return
     }
-
+    // Check if user is admin
     if (data.type === ADMIN) return redirect('/admin')
   }
 
