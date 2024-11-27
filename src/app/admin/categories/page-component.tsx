@@ -44,10 +44,14 @@ type Props = {
 }
 
 const CategoriesPageComponent: FC<Props> = ({ categories }) => {
+  // 用于控制创建分类弹窗的状态
   const [isCreateCategoryModalOpen, setIsCreateCategoryModalOpen] =
     useState(false)
+  // 用于控制当前编辑的分类
   const [currentCategory, setCurrentCategory] =
     useState<CreateCategorySchema | null>(null)
+  // 用于控制Dialog的标题
+  const [dialogTitle, setDialogTitle] = useState('Create Category')
 
   const form = useForm<CreateCategorySchema>({
     resolver: zodResolver(createCategorySchema),
@@ -134,6 +138,7 @@ const CategoriesPageComponent: FC<Props> = ({ categories }) => {
                 onClick={() => {
                   setCurrentCategory(null)
                   setIsCreateCategoryModalOpen(true)
+                  setDialogTitle('Create Category')
                 }}
               >
                 <PlusCircle className="h-3.5 w-3.5" />
@@ -144,7 +149,7 @@ const CategoriesPageComponent: FC<Props> = ({ categories }) => {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Create Category</DialogTitle>
+                <DialogTitle>{dialogTitle}</DialogTitle>
               </DialogHeader>
               <CategoryForm
                 form={form}
@@ -182,6 +187,7 @@ const CategoriesPageComponent: FC<Props> = ({ categories }) => {
                   key={category.id}
                   category={category}
                   setCurrentCategory={setCurrentCategory}
+                  setDialogTitle={setDialogTitle}
                   setIsCreateCategoryModalOpen={setIsCreateCategoryModalOpen}
                   deleteCategoryHandler={deleteCategoryHandler}
                 />

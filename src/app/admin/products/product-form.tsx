@@ -22,6 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog'
 import { CreateOrUpdateProductSchema } from '@/app/admin/products/schema'
 import { Input } from '@/components/ui/input'
@@ -33,6 +34,7 @@ type Props = {
   onSubmit: (data: CreateOrUpdateProductSchema) => void
   categories: Category[]
   setIsProductModalOpen: Dispatch<SetStateAction<boolean>>
+  productModalTitle: string
   isProductModalOpen: boolean
   defaultValues: CreateOrUpdateProductSchema | null
 }
@@ -42,10 +44,13 @@ export const ProductForm = ({
   onSubmit,
   categories,
   setIsProductModalOpen,
+  productModalTitle,
   isProductModalOpen,
   defaultValues,
 }: Props) => {
   const isSubmitting = form.formState.isSubmitting
+
+  // 用于控制对话框的标题
 
   useEffect(() => {
     if (defaultValues) {
@@ -66,7 +71,9 @@ export const ProductForm = ({
     <Dialog open={isProductModalOpen} onOpenChange={setIsProductModalOpen}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Product</DialogTitle>
+          <DialogTitle>{productModalTitle}</DialogTitle>
+          {/* 添加对话框描述，消除无障碍告警 */}
+          <DialogDescription>Please fill out the form below</DialogDescription>
         </DialogHeader>
         <div
           className="max-h-[calc(100svh-200px)] overflow-y-auto"
@@ -212,7 +219,7 @@ export const ProductForm = ({
 
               <DialogFooter>
                 <Button disabled={isSubmitting} type="submit">
-                  Add Product
+                  Submit
                 </Button>
               </DialogFooter>
             </form>

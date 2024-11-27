@@ -48,7 +48,7 @@ export const imageUploadHandler = async (formData: FormData) => {
 
     const {
       data: { publicUrl },
-    } = await supabase.storage.from('app-images').getPublicUrl(data.path)
+    } = supabase.storage.from('app-images').getPublicUrl(data.path)
 
     return publicUrl
   } catch (error) {

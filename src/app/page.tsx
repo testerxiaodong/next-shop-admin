@@ -88,12 +88,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
+      {/* 首页头部 */}
       <header className="container mx-auto px-4 py-6 flex justify-between items-center">
         <h1 className="text-2xl font-bold">GadgetApp</h1>
       </header>
-
+      {/* 首页主要区域 */}
       <main className="container mx-auto px-4 py-12">
+        {/* app功能介绍以及动画 */}
         <section className="mb-24">
+          {/* 功能介绍以及下载链接 */}
           <div className="flex flex-col justify-between md:flex-row items-center">
             <div className="md:w-1/2 mb-8 md:mb-0">
               <MotionWrapper>
@@ -113,8 +116,8 @@ export default function Home() {
                 </Button>
               </MotionWrapper>
             </div>
-
-            <div className="w-1/3">
+            {/* 动画 */}
+            <div className="w-full md:w-1/3">
               <motion.div
                 className="relative"
                 style={{ perspective: 1000 }}
@@ -251,7 +254,7 @@ export default function Home() {
           </Button>
         </section>
       </main>
-
+      {/* 首页底部 */}
       <footer className="bg-[#1BC464] text-white">
         <Link
           href={`https://cengdong.store`}

@@ -29,11 +29,13 @@ import { CategoryWithProducts } from '@/app/admin/categories/categories.types'
 export const CategoryTableRow = ({
   category,
   setCurrentCategory,
+  setDialogTitle,
   setIsCreateCategoryModalOpen,
   deleteCategoryHandler,
 }: {
   category: CategoryWithProducts
   setCurrentCategory: (category: CreateCategorySchema | null) => void
+  setDialogTitle: (title: string) => void
   setIsCreateCategoryModalOpen: (isOpen: boolean) => void
   deleteCategoryHandler: (id: number) => Promise<void>
 }) => {
@@ -46,6 +48,7 @@ export const CategoryTableRow = ({
       intent: 'update',
       slug: category.slug,
     })
+    setDialogTitle('Update Category')
     setIsCreateCategoryModalOpen(true)
   }
 

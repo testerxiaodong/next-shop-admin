@@ -9,6 +9,7 @@ import { CreateOrUpdateProductSchema } from '@/app/admin/products/schema'
 
 type Props = {
   product: ProductWithCategory
+  setProductModalTitle: Dispatch<SetStateAction<string>>
   setIsProductModalOpen: Dispatch<SetStateAction<boolean>>
   setCurrentProduct: Dispatch<
     SetStateAction<CreateOrUpdateProductSchema | null>
@@ -18,6 +19,7 @@ type Props = {
 
 export const ProductTableRow = ({
   product,
+  setProductModalTitle,
   setIsProductModalOpen,
   setCurrentProduct,
   setIsDeleteModalOpen,
@@ -33,6 +35,7 @@ export const ProductTableRow = ({
       slug: product.slug,
       intent: 'update',
     })
+    setProductModalTitle('Edit Product')
     setIsProductModalOpen(true)
   }
 
@@ -86,7 +89,7 @@ export const ProductTableRow = ({
         <Button
           variant="ghost"
           size="icon"
-          onClick={() =>
+          onClick={() => {
             setCurrentProduct({
               title: product.title,
               category: product.category.id.toString(),
@@ -96,12 +99,10 @@ export const ProductTableRow = ({
               slug: product.slug,
               intent: 'update',
             })
-          }
+            setIsDeleteModalOpen(true)
+          }}
         >
-          <Trash2
-            className="h-4 w-4"
-            onClick={() => setIsDeleteModalOpen(true)}
-          />
+          <Trash2 className="h-4 w-4" />
         </Button>
       </TableCell>
     </TableRow>

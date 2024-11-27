@@ -43,9 +43,14 @@ export const ProductPageComponent: FC<Props> = ({
   categories,
   productsWithCategories,
 }) => {
+  // 用于存储当前选择的产品
   const [currentProduct, setCurrentProduct] =
     useState<CreateOrUpdateProductSchema | null>(null)
+  // 用于控制产品模态框的打开/关闭
   const [isProductModalOpen, setIsProductModalOpen] = useState(false)
+  // 用于控制产品模态框标题
+  const [productModalTitle, setProductModalTitle] = useState('Create Product')
+  // 用于控制删除产品模态框的打开/关闭
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const form = useForm<CreateOrUpdateProductSchema>({
@@ -63,6 +68,7 @@ export const ProductPageComponent: FC<Props> = ({
 
   const router = useRouter()
 
+  // 处理产品的创建/更新
   const productCreateUpdateHandler = async (
     data: CreateOrUpdateProductSchema
   ) => {
@@ -77,6 +83,7 @@ export const ProductPageComponent: FC<Props> = ({
       intent = 'create',
     } = data
 
+    // 定义上传文件的函数
     const uploadFile = async (file: File) => {
       const uniqueId = uuid()
       const fileName = `product/product-${uniqueId}-${file.name}`
@@ -155,6 +162,7 @@ export const ProductPageComponent: FC<Props> = ({
     }
   }
 
+  // 处理产品的删除
   const deleteProductHandler = async () => {
     if (currentProduct?.slug) {
       await deleteProduct(currentProduct.slug)
@@ -168,18 +176,20 @@ export const ProductPageComponent: FC<Props> = ({
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="container mx-auto p-4">
+        {/* 头部以及添加产品按钮 */}
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold">Products Management</h1>
           <Button
             onClick={() => {
               setCurrentProduct(null)
+              setProductModalTitle('Create Product')
               setIsProductModalOpen(true)
             }}
           >
             <PlusIcon className="mr-2 h-4 w-4" /> Add Product
           </Button>
         </div>
-
+        {/* 产品列表 */}
         <Table>
           <TableHeader>
             <TableRow>
@@ -192,9 +202,11 @@ export const ProductPageComponent: FC<Props> = ({
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
+          {/* 列表内容 */}
           <TableBody>
             {productsWithCategories.map((product) => (
               <ProductTableRow
+                setProductModalTitle={setProductModalTitle}
                 setIsProductModalOpen={setIsProductModalOpen}
                 key={product.id}
                 product={product}
@@ -204,17 +216,16 @@ export const ProductPageComponent: FC<Props> = ({
             ))}
           </TableBody>
         </Table>
-
         {/* Product Modal */}
         <ProductForm
           form={form}
           onSubmit={productCreateUpdateHandler}
           categories={categories}
           isProductModalOpen={isProductModalOpen}
+          productModalTitle={productModalTitle}
           setIsProductModalOpen={setIsProductModalOpen}
           defaultValues={currentProduct}
         />
-
         {/* Delete Product Modal */}
         <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
           <DialogContent>
