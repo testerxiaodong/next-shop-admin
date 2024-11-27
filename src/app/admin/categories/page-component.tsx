@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -150,6 +151,10 @@ const CategoriesPageComponent: FC<Props> = ({ categories }) => {
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>{dialogTitle}</DialogTitle>
+                {/* 添加对话框描述，消除无障碍告警 */}
+                <DialogDescription>
+                  Please fill out the form below
+                </DialogDescription>
               </DialogHeader>
               <CategoryForm
                 form={form}
