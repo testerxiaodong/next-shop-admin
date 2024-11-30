@@ -16,7 +16,7 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'codewithcengdong shop admin',
+  title: 'cengdong shop admin',
   description: 'React Native Shop Admin',
 }
 

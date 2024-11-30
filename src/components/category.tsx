@@ -91,7 +91,8 @@ export const CategoryTableRow = ({
                 <DialogTitle className="sr-only">
                   Category product list
                 </DialogTitle>
-                <h2>Products</h2>
+                <DialogDescription>Products</DialogDescription>
+
                 <ScrollArea className="h-[400px] rounded-md p-4">
                   {category.products.map((product) => (
                     <Card key={product.id} className="cursor-pointer">

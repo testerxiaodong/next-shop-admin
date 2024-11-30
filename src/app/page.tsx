@@ -261,7 +261,7 @@ export default function Home() {
           target="_blank"
           className="container mx-auto px-4 text-center"
         >
-          <p>@ codewithcengdong</p>
+          <p>@ cengdong</p>
         </Link>
       </footer>
     </div>

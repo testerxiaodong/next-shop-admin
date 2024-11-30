@@ -126,6 +126,7 @@ const CategoriesPageComponent: FC<Props> = ({ categories }) => {
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
       <div className="flex items-center my-10">
         <div className="ml-auto flex items-center gap-2">
+          {/* 新增分类对话框，使用Dialog组件，通过点击AddCategory控制弹窗的打开与关闭 */}
           <Dialog
             open={isCreateCategoryModalOpen}
             onOpenChange={() =>

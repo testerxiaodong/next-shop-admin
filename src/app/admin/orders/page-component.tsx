@@ -25,6 +25,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -139,6 +140,9 @@ export default function PageComponent({ ordersWithProducts }: Props) {
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Order Products</DialogTitle>
+                      <DialogDescription>
+                        all products in this order
+                      </DialogDescription>
                     </DialogHeader>
 
                     <div className="mt-4">
