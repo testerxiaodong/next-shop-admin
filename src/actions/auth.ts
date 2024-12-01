@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/supabase/server'
+import { AuthError } from '@supabase/supabase-js'
 
 export const authenticate = async (email: string, password: string) => {
   const supabase = await createClient()
@@ -9,11 +10,11 @@ export const authenticate = async (email: string, password: string) => {
       email,
       password,
     })
-
-    if (error) throw error
+    // 登陆失败，返回error
+    if (error instanceof AuthError) return error
   } catch (error) {
-    console.log('AUTHENTICATION ERROR', error)
-    throw error
+    // 其他错误，抛出error
+    throw new Error(`Error authenticating: ${error}`)
   }
 }
 

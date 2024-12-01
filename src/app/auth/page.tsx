@@ -15,6 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 const loginSchema = z.object({
@@ -41,11 +42,26 @@ export default function Auth() {
     setIsAuthenticating(true)
 
     try {
-      // console.log(email, password)
-      await authenticate(email, password)
-      router.push('/admin')
+      const error = await authenticate(email, password)
+      // 返回值不为空，提示登录失败
+      if (error) {
+        toast.error('Invalid email or password', {
+          position: 'top-right',
+        })
+      } else {
+        // 登录成功，提示登录成功 并跳转到后台管理页面
+        toast.success('Logged in successfully', {
+          position: 'top-right',
+        })
+        router.push('/admin')
+      }
     } catch (error) {
-      console.error(error)
+      // 捕获到异常，提示异常中的错误信息
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error('An error occurred while authenticating')
+      }
     } finally {
       setIsAuthenticating(false)
     }
