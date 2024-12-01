@@ -18,6 +18,7 @@ export const getOrdersWithProducts = async () => {
 
 export const updateOrderStatus = async (orderId: number, status: string) => {
   const supabase = await createClient()
+  // 更新supabase订单状态
   const { error } = await supabase
     .from('order')
     .update({ status })
@@ -25,6 +26,7 @@ export const updateOrderStatus = async (orderId: number, status: string) => {
 
   if (error) throw new Error(error.message)
 
+  // 查询用户信息：userId
   const {
     data: { session },
   } = await supabase.auth.getSession()
@@ -33,6 +35,7 @@ export const updateOrderStatus = async (orderId: number, status: string) => {
 
   if (!userId) throw new Error('User not found')
 
+  // 向用户发送通知
   await sendNotification(userId, status + ' 🚀')
 
   revalidatePath('/admin/orders')

@@ -257,7 +257,7 @@ export default function Home() {
       {/* 首页底部 */}
       <footer className="bg-[#1BC464] text-white">
         <Link
-          href={`https://cengdong.store`}
+          href={`https://github.com/testerxiaodong`}
           target="_blank"
           className="container mx-auto px-4 text-center"
         >

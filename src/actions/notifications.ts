@@ -2,6 +2,12 @@
 
 import { createClient } from '@/supabase/server'
 
+/**
+ * 通过EXPO HTTP/2 API 向用户发送通知，具体请查看文档：https://docs.expo.dev/push-notifications/sending-notifications/#http2-api
+ * @param expoPushToken 用户的 Expo push notification token
+ * @param title 通知标题
+ * @param body 通知内容
+ */
 async function sendPushNotification({
   expoPushToken,
   title,
@@ -30,6 +36,11 @@ async function sendPushNotification({
   })
 }
 
+/**
+ * 根据userId 查询用户的 Expo push notification token
+ * @param userId 用户 ID
+ * @returns 用户的 Expo push notification token
+ */
 export const getUserNotificationToken = async (userId: string) => {
   const supabase = await createClient()
   const { data, error } = await supabase
