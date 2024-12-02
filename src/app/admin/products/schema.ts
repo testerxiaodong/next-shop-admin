@@ -2,24 +2,33 @@ import { z } from 'zod'
 
 export const createOrUpdateProductSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
-  price: z.string().min(1, { message: 'price is required' }),
-  maxQuantity: z.string().min(1, { message: 'maxQuantity is required' }),
+  price: z.preprocess(
+    (val) => parseFloat(val as string),
+    z.number().min(0, 'Price must be a positive number')
+  ),
+  maxQuantity: z.preprocess(
+    (val) => parseInt(val as string, 10),
+    z.number().min(0, 'Max Quantity must be a positive number')
+  ),
   category: z.string().min(1, { message: 'Category is required' }),
   heroImage: z
-    .any()
-    .refine((file) => file.length === 1, 'heroImage is required'),
+    .union([
+      z.instanceof(File), // 上传新图片
+      z.string().url(), // 保留现有图片 URL
+    ])
+    .optional() // 在编辑模式下不强制要求
+    .refine((value) => value !== undefined, 'Hero image is required'), // 确保有值
   images: z
-    .any()
-    .refine(
-      (files: FileList | null) => files instanceof FileList && files.length > 0,
-      { message: 'At least one image is required' }
+    .array(
+      z.union([
+        z.instanceof(File), // 上传新图片
+        z.string().url(), // 保留现有图片 URL
+      ])
     )
-    .transform((files: FileList | null) => (files ? Array.from(files) : [])),
-  intent: z
-    .enum(['create', 'update'], {
-      message: 'Intent must be either create or update',
-    })
-    .optional(),
+    .nonempty({ message: 'At least one image is required' }) // 至少有一张图片
+    .refine((images) => images && images.length > 0, {
+      message: 'At least one image is required',
+    }), // 确保至少有一张图片
   slug: z.string().optional(),
 })
 

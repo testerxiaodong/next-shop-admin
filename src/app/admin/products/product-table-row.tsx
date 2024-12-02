@@ -9,7 +9,7 @@ import { CreateOrUpdateProductSchema } from '@/app/admin/products/schema'
 
 type Props = {
   product: ProductWithCategory
-  setProductModalTitle: Dispatch<SetStateAction<string>>
+  setIsEditMode: Dispatch<SetStateAction<boolean>>
   setIsProductModalOpen: Dispatch<SetStateAction<boolean>>
   setCurrentProduct: Dispatch<
     SetStateAction<CreateOrUpdateProductSchema | null>
@@ -19,7 +19,7 @@ type Props = {
 
 export const ProductTableRow = ({
   product,
-  setProductModalTitle,
+  setIsEditMode,
   setIsProductModalOpen,
   setCurrentProduct,
   setIsDeleteModalOpen,
@@ -31,11 +31,14 @@ export const ProductTableRow = ({
       price: product.price,
       maxQuantity: product.maxQuantity,
       heroImage: product.heroImage,
-      images: product.images,
+      // 处理 images 确保类型匹配
+      images:
+        product.images && product.images.length > 0
+          ? [product.images[0], ...product.images.slice(1)]
+          : ['placeholder'],
       slug: product.slug,
-      intent: 'update',
     })
-    setProductModalTitle('Edit Product')
+    setIsEditMode(true)
     setIsProductModalOpen(true)
   }
 
@@ -76,11 +79,14 @@ export const ProductTableRow = ({
             handleEditClick({
               title: product.title,
               category: product.category.id.toString(),
-              price: product.price?.toString() ?? '',
-              maxQuantity: product.maxQuantity.toString(),
-              images: [],
+              price: product.price,
+              maxQuantity: product.maxQuantity,
+              heroImage: product.heroImage,
+              images:
+                product.imagesUrl.length > 0
+                  ? [product.imagesUrl[0], ...product.imagesUrl.slice(1)]
+                  : ['placeholder'],
               slug: product.slug,
-              intent: 'update',
             })
           }
         >
@@ -93,11 +99,15 @@ export const ProductTableRow = ({
             setCurrentProduct({
               title: product.title,
               category: product.category.id.toString(),
-              price: product.price?.toString() ?? '',
-              maxQuantity: product.maxQuantity.toString(),
-              images: [],
+              price: product.price,
+              maxQuantity: product.maxQuantity,
+              heroImage: product.heroImage,
+              // 确保 images 至少有一个元素
+              images:
+                product.imagesUrl.length > 0
+                  ? [product.imagesUrl[0], ...product.imagesUrl.slice(1)]
+                  : ['placeholder'], // 确保 images 类型,
               slug: product.slug,
-              intent: 'update',
             })
             setIsDeleteModalOpen(true)
           }}

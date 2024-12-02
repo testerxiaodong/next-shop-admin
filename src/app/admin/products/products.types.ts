@@ -7,7 +7,7 @@ export type ProductWithCategory = {
   id: number
   imagesUrl: string[]
   maxQuantity: number
-  price: number | null
+  price: number
   slug: string
   title: string
 }
