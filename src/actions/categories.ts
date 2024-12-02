@@ -6,7 +6,7 @@ import { CategoriesWithProductsResponse } from '@/app/admin/categories/categorie
 import {
   CreateCategorySchemaServer,
   UpdateCategorySchema,
-} from '@/app/admin/categories/create-category.schema'
+} from '@/app/admin/categories/category.schema'
 import { createClient } from '@/supabase/server'
 import { revalidatePath } from 'next/cache'
 

@@ -23,44 +23,51 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import { TableCell, TableRow } from '@/components/ui/table'
-import { CreateCategorySchema } from '@/app/admin/categories/create-category.schema'
 import { CategoryWithProducts } from '@/app/admin/categories/categories.types'
+import { deleteCategory } from '@/actions/categories'
+import { useRouter } from 'next/navigation'
+import { CreateCategorySchema } from '@/app/admin/categories/category.schema'
 
 export const CategoryTableRow = ({
   category,
+  setIsModalOpen,
   setCurrentCategory,
-  setDialogTitle,
-  setIsCreateCategoryModalOpen,
-  deleteCategoryHandler,
+  setIsEditMode,
 }: {
   category: CategoryWithProducts
-  setCurrentCategory: (category: CreateCategorySchema | null) => void
-  setDialogTitle: (title: string) => void
-  setIsCreateCategoryModalOpen: (isOpen: boolean) => void
-  deleteCategoryHandler: (id: number) => Promise<void>
+  setIsModalOpen: (isOpen: boolean) => void
+  setCurrentCategory: (category: CreateCategorySchema) => void
+  setIsEditMode: (isEditMode: boolean) => void
 }) => {
+  // 控制删除弹窗的显示与关闭
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
 
-  const handleEditClick = (category: CreateCategorySchema) => {
+  const router = useRouter()
+
+  // 点击编辑按钮时的回调函数
+  const handleEditClick = (category: CategoryWithProducts) => {
+    console.log('category', category)
+    setIsModalOpen(true)
+    setIsEditMode(true)
     setCurrentCategory({
       name: category.name,
-      image: new File([], ''),
-      intent: 'update',
+      image: category.imageUrl,
       slug: category.slug,
     })
-    setDialogTitle('Update Category')
-    setIsCreateCategoryModalOpen(true)
   }
 
-  const handleDelete = async () => {
-    await deleteCategoryHandler(category.id)
+  const handleDelete = async (id: number) => {
+    // 删除分类
+    await deleteCategory(id)
+    // 刷新页面
+    router.refresh()
+    // 关闭弹窗
     setIsDeleteDialogOpen(false)
   }
 
   return (
     <>
       <TableRow>
-        {/* 分类图片 */}
         <TableCell className="sm:table-cell">
           <Image
             alt="Product image"
@@ -71,13 +78,10 @@ export const CategoryTableRow = ({
             priority
           />
         </TableCell>
-        {/* 分类名称 */}
         <TableCell className="font-medium">{category.name}</TableCell>
-        {/* 分类创建时间 */}
         <TableCell className="md:table-cell">
           {format(new Date(category.created_at), 'yyyy-MM-dd')}
         </TableCell>
-        {/* 分类产品列表 */}
         <TableCell className="md:table-cell">
           {category.products && category.products.length > 0 ? (
             <Dialog>
@@ -91,8 +95,7 @@ export const CategoryTableRow = ({
                 <DialogTitle className="sr-only">
                   Category product list
                 </DialogTitle>
-                <DialogDescription>Products</DialogDescription>
-
+                <h2>Products</h2>
                 <ScrollArea className="h-[400px] rounded-md p-4">
                   {category.products.map((product) => (
                     <Card key={product.id} className="cursor-pointer">
@@ -122,7 +125,6 @@ export const CategoryTableRow = ({
             'No products linked to this category'
           )}
         </TableCell>
-        {/* 分类操作选项 */}
         <TableCell>
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -135,7 +137,6 @@ export const CategoryTableRow = ({
                 onClick={() =>
                   handleEditClick({
                     ...category,
-                    intent: 'update',
                   })
                 }
               >
@@ -168,7 +169,10 @@ export const CategoryTableRow = ({
             >
               Cancel
             </Button>
-            <Button variant="destructive" onClick={handleDelete}>
+            <Button
+              variant="destructive"
+              onClick={() => handleDelete(category.id)}
+            >
               Confirm Delete
             </Button>
           </div>
