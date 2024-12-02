@@ -46,7 +46,6 @@ export const CategoryTableRow = ({
 
   // 点击编辑按钮时的回调函数
   const handleEditClick = (category: CategoryWithProducts) => {
-    console.log('category', category)
     setIsModalOpen(true)
     setIsEditMode(true)
     setCurrentCategory({

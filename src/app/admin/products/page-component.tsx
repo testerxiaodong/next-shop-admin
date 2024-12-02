@@ -2,10 +2,6 @@
 
 import { FC, useState } from 'react'
 import { PlusIcon } from 'lucide-react'
-import { v4 as uuid } from 'uuid'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 import { ProductsWithCategoriesResponse } from '@/app/admin/products/products.types'
@@ -25,14 +21,11 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Category } from '@/app/admin/categories/categories.types'
-import {
-  createOrUpdateProductSchema,
-  CreateOrUpdateProductSchema,
-} from '@/app/admin/products/schema'
-import { imageUploadHandler } from '@/actions/categories'
-import { createProduct, deleteProduct, updateProduct } from '@/actions/products'
-import { ProductForm } from '@/app/admin/products/product-form'
+import { CreateOrUpdateProductSchema } from '@/app/admin/products/schema'
+import { deleteProduct } from '@/actions/products'
+import { ProductForm } from '@/app/admin/products/product-dialog-form'
 import { ProductTableRow } from '@/app/admin/products/product-table-row'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   categories: Category[]
@@ -48,121 +41,13 @@ export const ProductPageComponent: FC<Props> = ({
     useState<CreateOrUpdateProductSchema | null>(null)
   // 用于控制产品模态框的打开/关闭
   const [isProductModalOpen, setIsProductModalOpen] = useState(false)
-  // 用于控制产品模态框标题
-  const [productModalTitle, setProductModalTitle] = useState('Create Product')
+  // 用于控制当前模式
+  const [isEditMode, setIsEditMode] = useState(false)
   // 用于控制删除产品模态框的打开/关闭
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
-  const form = useForm<CreateOrUpdateProductSchema>({
-    resolver: zodResolver(createOrUpdateProductSchema),
-    defaultValues: {
-      title: '',
-      category: undefined,
-      price: undefined,
-      maxQuantity: undefined,
-      heroImage: undefined,
-      images: [],
-      intent: 'create',
-    },
-  })
-
-  const router = useRouter()
-
-  // 处理产品的创建/更新
-  const productCreateUpdateHandler = async (
-    data: CreateOrUpdateProductSchema
-  ) => {
-    const {
-      category,
-      images,
-      maxQuantity,
-      price,
-      title,
-      heroImage,
-      slug,
-      intent = 'create',
-    } = data
-
-    // 定义上传文件的函数
-    const uploadFile = async (file: File) => {
-      const uniqueId = uuid()
-      const fileName = `product/product-${uniqueId}-${file.name}`
-      const formData = new FormData()
-      formData.append('file', file, fileName)
-      return imageUploadHandler(formData)
-    }
-
-    let heroImageUrl: string | undefined
-    let imageUrls: string[] = []
-
-    if (heroImage) {
-      const imagePromise = Array.from(heroImage).map((file) =>
-        uploadFile(file as File)
-      )
-      try {
-        ;[heroImageUrl] = await Promise.all(imagePromise)
-      } catch (error) {
-        console.error('Error uploading image:', error)
-        toast.error('Error uploading image')
-        return
-      }
-    }
-
-    if (images.length > 0) {
-      const imagesPromises = Array.from(images).map((file) => uploadFile(file))
-
-      try {
-        imageUrls = (await Promise.all(imagesPromises)) as string[]
-      } catch (error) {
-        console.error('Error uploading images:', error)
-        toast.error('Error uploading images')
-        return
-      }
-    }
-
-    switch (intent) {
-      case 'create': {
-        if (heroImageUrl && imageUrls.length > 0) {
-          await createProduct({
-            category: Number(category),
-            images: imageUrls,
-            heroImage: heroImageUrl,
-            maxQuantity: Number(maxQuantity),
-            price: Number(price),
-            title,
-          })
-          form.reset()
-          router.refresh()
-          setIsProductModalOpen(false)
-          toast.success('Product created successfully')
-        }
-        break
-      }
-      case 'update': {
-        if (heroImageUrl && imageUrls.length > 0 && slug) {
-          await updateProduct({
-            category: Number(category),
-            heroImage: heroImageUrl!,
-            imagesUrl: imageUrls,
-            maxQuantity: Number(maxQuantity),
-            price: Number(price),
-            title,
-            slug,
-          })
-          form.reset()
-          router.refresh()
-          setIsProductModalOpen(false)
-          toast.success('Product updated successfully')
-        }
-        break
-      }
-
-      default:
-        console.error('Invalid intent')
-    }
-  }
-
   // 处理产品的删除
+  const router = useRouter()
   const deleteProductHandler = async () => {
     if (currentProduct?.slug) {
       await deleteProduct(currentProduct.slug)
@@ -181,8 +66,11 @@ export const ProductPageComponent: FC<Props> = ({
           <h1 className="text-2xl font-bold">Products Management</h1>
           <Button
             onClick={() => {
+              // 清空当前选择的产品
               setCurrentProduct(null)
-              setProductModalTitle('Create Product')
+              // 设置为新增模式
+              setIsEditMode(false)
+              // 打开产品模态框
               setIsProductModalOpen(true)
             }}
           >
@@ -206,7 +94,7 @@ export const ProductPageComponent: FC<Props> = ({
           <TableBody>
             {productsWithCategories.map((product) => (
               <ProductTableRow
-                setProductModalTitle={setProductModalTitle}
+                setIsEditMode={setIsEditMode}
                 setIsProductModalOpen={setIsProductModalOpen}
                 key={product.id}
                 product={product}
@@ -218,16 +106,17 @@ export const ProductPageComponent: FC<Props> = ({
         </Table>
         {/* Product Modal */}
         <ProductForm
-          form={form}
-          onSubmit={productCreateUpdateHandler}
           categories={categories}
           isProductModalOpen={isProductModalOpen}
-          productModalTitle={productModalTitle}
+          isEditMode={isEditMode}
           setIsProductModalOpen={setIsProductModalOpen}
           defaultValues={currentProduct}
         />
         {/* Delete Product Modal */}
-        <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+        <Dialog
+          open={isDeleteModalOpen}
+          onOpenChange={() => setIsDeleteModalOpen(!isDeleteModalOpen)}
+        >
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Delete Product</DialogTitle>
