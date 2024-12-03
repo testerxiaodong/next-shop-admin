@@ -35,6 +35,10 @@ import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { v4 as uuid } from 'uuid'
+import { imageUploadHandler } from '@/actions/categories'
+import { toast } from 'sonner'
+import { createProduct, updateProduct } from '@/actions/products'
 
 type Props = {
   categories: Category[]
@@ -51,6 +55,7 @@ export const ProductForm = ({
   isProductModalOpen,
   defaultValues,
 }: Props) => {
+  // console.log('defaultValues', defaultValues)
   // 表单验证规则
   const form = useForm<CreateOrUpdateProductSchema>({
     resolver: zodResolver(
@@ -78,7 +83,23 @@ export const ProductForm = ({
     },
   })
 
-  // **新增: 动态生成和清理预览 URL**
+  // 根据是否有默认值重置表单
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset(defaultValues)
+    } else {
+      form.reset({
+        title: '',
+        category: '',
+        price: 0,
+        maxQuantity: 0,
+        heroImage: undefined,
+        images: [],
+      })
+    }
+  }, [defaultValues, form])
+
+  // 动态生成和清理预览 URL
   const [previewHeroImageUrl, setPreviewHeroImageUrl] = useState<string | null>(
     null
   )
@@ -87,6 +108,7 @@ export const ProductForm = ({
   const heroImage = form.watch('heroImage')
   const images = form.watch('images')
 
+  // 监听 heroImage 变化，生成预览 URL
   useEffect(() => {
     if (heroImage instanceof File) {
       const url = URL.createObjectURL(heroImage)
@@ -101,6 +123,7 @@ export const ProductForm = ({
     }
   }, [heroImage])
 
+  // 监听 images 变化，生成预览 URLs
   useEffect(() => {
     if (Array.isArray(images) && images.length > 0) {
       const urls = images.map((image) => {
@@ -125,26 +148,91 @@ export const ProductForm = ({
 
   // 处理产品的创建/更新
   const onSubmit = async (data: CreateOrUpdateProductSchema) => {
-    console.log(data)
-    form.reset()
-    router.refresh()
-    setIsProductModalOpen(false)
+    // console.log('onSubmit', data)
+    try {
+      const { category, title, price, maxQuantity, heroImage, images } = data
+
+      // 1. 并行上传主图和产品图片
+      const uploadedHeroImagePromise = handleImageUpload(heroImage)
+
+      const uploadedImagesPromises = images.map((image) =>
+        handleImageUpload(image)
+      )
+
+      // 等待所有图片上传完成
+      const [uploadedHeroImage, uploadedImages] = await Promise.all([
+        uploadedHeroImagePromise,
+        Promise.all(uploadedImagesPromises),
+      ])
+
+      // 检查主图是否成功上传
+      if (!uploadedHeroImage) {
+        toast.error('Failed to upload the hero image. Please try again.')
+        return
+      }
+
+      // 检查是否所有产品图片都成功上传
+      if (uploadedImages.includes(null)) {
+        toast.error('Failed to upload some product images. Please try again.')
+        return
+      }
+
+      // 2. 创建产品逻辑
+      if (!isEditMode) {
+        await createProduct({
+          category: Number(category),
+          heroImage: uploadedHeroImage,
+          images: uploadedImages as string[],
+          title,
+          price,
+          maxQuantity,
+        })
+      } else {
+        await updateProduct({
+          category: Number(category),
+          heroImage: uploadedHeroImage,
+          imagesUrl: uploadedImages as string[],
+          title,
+          price,
+          maxQuantity,
+          slug: defaultValues?.slug as string,
+        })
+      }
+
+      // 4. 成功后操作
+      toast.success(
+        isEditMode
+          ? 'Product updated successfully!'
+          : 'Product created successfully!'
+      )
+      form.reset() // 重置表单
+      router.refresh() // 刷新页面
+      setIsProductModalOpen(false) // 关闭模态框
+    } catch (error) {
+      console.error(error)
+      toast.error('Something went wrong. Please try again.')
+    }
   }
 
-  useEffect(() => {
-    if (defaultValues) {
-      form.reset(defaultValues)
-    } else {
-      form.reset({
-        title: '',
-        category: '',
-        price: 0,
-        maxQuantity: 0,
-        heroImage: undefined,
-        images: [],
-      })
+  // 辅助函数：上传图片（主图或产品图）
+  const handleImageUpload = async (image: string | File) => {
+    if (image instanceof File) {
+      const uniqueId = uuid()
+      const fileName = `product-images/${uniqueId}`
+      const formData = new FormData()
+      formData.append('file', image, fileName)
+
+      try {
+        return await imageUploadHandler(formData)
+      } catch (err) {
+        console.error('Image upload failed:', err)
+        return null
+      }
     }
-  }, [defaultValues, form])
+
+    // 如果图片是已有的 URL（编辑模式），直接返回
+    return typeof image === 'string' ? image : null
+  }
 
   const handleDialogClose = () => {
     setIsProductModalOpen(false)
