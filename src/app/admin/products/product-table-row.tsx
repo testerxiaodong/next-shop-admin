@@ -25,6 +25,7 @@ export const ProductTableRow = ({
   setIsDeleteModalOpen,
 }: Props) => {
   const handleEditClick = (product: CreateOrUpdateProductSchema) => {
+    // console.log('handleEditClick', product)
     setCurrentProduct({
       title: product.title,
       category: product.category,
@@ -59,6 +60,7 @@ export const ProductTableRow = ({
           />
         )}
       </TableCell>
+      {/* 产品图片列表 */}
       <TableCell>
         {product.imagesUrl.map((url, index) => (
           <Image
@@ -71,7 +73,9 @@ export const ProductTableRow = ({
           />
         ))}
       </TableCell>
+      {/* 编辑按钮和删除按钮 */}
       <TableCell>
+        {/* 编辑按钮 */}
         <Button
           variant="ghost"
           size="icon"
@@ -92,6 +96,7 @@ export const ProductTableRow = ({
         >
           <Pencil className="h-4 w-4" />
         </Button>
+        {/* 删除按钮 */}
         <Button
           variant="ghost"
           size="icon"

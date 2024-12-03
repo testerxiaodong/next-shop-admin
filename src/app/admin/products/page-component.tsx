@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog'
 import { Category } from '@/app/admin/categories/categories.types'
 import { CreateOrUpdateProductSchema } from '@/app/admin/products/schema'
@@ -120,6 +121,11 @@ export const ProductPageComponent: FC<Props> = ({
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Delete Product</DialogTitle>
+              <DialogDescription>
+                <span className="sr-only">
+                  Are you sure you want to delete this product?
+                </span>
+              </DialogDescription>
             </DialogHeader>
             <p>Are you sure you want to delete {currentProduct?.title}</p>
             <DialogFooter>
