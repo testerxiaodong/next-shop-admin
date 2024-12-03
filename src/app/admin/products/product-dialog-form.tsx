@@ -287,7 +287,10 @@ export const ProductForm = ({
                   <FormItem className="flex flex-col">
                     <FormLabel>Category</FormLabel>
                     <FormControl>
-                      <Select onValueChange={field.onChange}>
+                      <Select
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
                         <SelectTrigger
                           disabled={form.formState.isSubmitting}
                           className="col-span-3"
