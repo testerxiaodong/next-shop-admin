@@ -12,7 +12,13 @@ const nextConfig: NextConfig = {
         hostname: 'images.unsplash.com',
       },
     ],
-  } /* config options here */,
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '15mb', // 将请求体大小限制设置为 15 MB
+    },
+  },
+  /* config options here */
 }
 
 export default nextConfig

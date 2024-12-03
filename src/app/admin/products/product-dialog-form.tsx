@@ -218,7 +218,7 @@ export const ProductForm = ({
   const handleImageUpload = async (image: string | File) => {
     if (image instanceof File) {
       const uniqueId = uuid()
-      const fileName = `product-images/${uniqueId}`
+      const fileName = `product/product-${uniqueId}`
       const formData = new FormData()
       formData.append('file', image, fileName)
 
