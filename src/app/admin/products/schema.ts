@@ -2,14 +2,14 @@ import { z } from 'zod'
 
 export const createOrUpdateProductSchema = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
-  price: z.preprocess(
-    (val) => parseFloat(val as string),
-    z.number().min(0, 'Price must be a positive number')
-  ),
-  maxQuantity: z.preprocess(
-    (val) => parseInt(val as string, 10),
-    z.number().min(0, 'Max Quantity must be a positive number')
-  ),
+  price: z
+    .number()
+    .int({ message: 'Price must be an integer' })
+    .min(0, { message: 'Price must be a positive integer' }),
+  maxQuantity: z
+    .number()
+    .int({ message: 'Max Quantity must be an integer' })
+    .min(0, { message: 'Max Quantity must be a positive integer' }),
   category: z.string().min(1, { message: 'Category is required' }),
   heroImage: z
     .union([
@@ -38,8 +38,14 @@ export type CreateOrUpdateProductSchema = z.infer<
 
 export const createProductSchemaServer = z.object({
   title: z.string().min(1, { message: 'Title is required' }),
-  price: z.number().positive({ message: 'price is required' }),
-  maxQuantity: z.number().positive({ message: 'maxQuantity is required' }),
+  price: z
+    .number()
+    .int({ message: 'Price must be an integer' })
+    .positive({ message: 'Price is required' }),
+  maxQuantity: z
+    .number()
+    .int({ message: 'Max Quantity must be an integer' })
+    .positive({ message: 'Max Quantity is required' }),
   category: z.number().positive({ message: 'Category is required' }),
   heroImage: z.string().url({ message: 'Hero image is required' }),
   images: z.array(z.string().url({ message: 'Images are required' })),
