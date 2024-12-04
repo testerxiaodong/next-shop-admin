@@ -1,3 +1,12 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "overrides": [
+    {
+      "files": ["tests/**/*.ts", "tests/**/*.js"], // Playwright 测试文件路径
+      "rules": {
+        "react-hooks/rules-of-hooks": "off", // 禁用 React Hooks 规则
+        "react-hooks/exhaustive-deps": "off" // 禁用 React 依赖检查规则
+      }
+    }
+  ]
 }
