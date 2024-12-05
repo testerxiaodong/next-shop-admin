@@ -4,6 +4,7 @@ import { AuthPage } from '../pages/authPage'
 import { DashboardPage } from '../pages/dashboardPage'
 import { OrdersPage } from '../pages/ordersPage'
 import { ProductsPage } from '../pages/productsPage'
+import { CategoriesPage } from '../pages/categoriesPage'
 
 const test = baseTest.extend<{
   homePage: HomePage
@@ -11,6 +12,7 @@ const test = baseTest.extend<{
   dashboardPage: DashboardPage
   ordersPage: OrdersPage
   productsPage: ProductsPage
+  categoriesPage: CategoriesPage
 }>({
   homePage: async ({ page }, use) => {
     await use(new HomePage(page))
@@ -26,6 +28,9 @@ const test = baseTest.extend<{
   },
   productsPage: async ({ page }, use) => {
     await use(new ProductsPage(page))
+  },
+  categoriesPage: async ({ page }, use) => {
+    await use(new CategoriesPage(page))
   },
 })
 
