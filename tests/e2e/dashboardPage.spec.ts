@@ -17,4 +17,16 @@ test.describe('Dashboard Page', () => {
     await dashboardPage.navigate()
     await dashboardPage.latestUsersChartCheck()
   })
+  test('navigateToOrdersPage', async ({ dashboardPage }) => {
+    await dashboardPage.navigate()
+    await dashboardPage.navigateToOrdersPage()
+  })
+  test('navigateToProductsPage', async ({ dashboardPage }) => {
+    await dashboardPage.navigate()
+    await dashboardPage.navigateToProductsPage()
+  })
+  test('navigateToCategoriesPage', async ({ dashboardPage }) => {
+    await dashboardPage.navigate()
+    await dashboardPage.navigateToCategoriesPage()
+  })
 })

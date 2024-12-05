@@ -27,6 +27,7 @@ import { CategoryWithProducts } from '@/app/admin/categories/categories.types'
 import { deleteCategory } from '@/actions/categories'
 import { useRouter } from 'next/navigation'
 import { CreateCategorySchema } from '@/app/admin/categories/category.schema'
+import { toast } from 'sonner'
 
 export const CategoryTableRow = ({
   category,
@@ -57,7 +58,13 @@ export const CategoryTableRow = ({
 
   const handleDelete = async (id: number) => {
     // 删除分类
-    await deleteCategory(id)
+    try {
+      await deleteCategory(id)
+      toast.success('Category deleted successfully')
+    } catch {
+      toast.error('Failed to delete category')
+    }
+
     // 刷新页面
     router.refresh()
     // 关闭弹窗

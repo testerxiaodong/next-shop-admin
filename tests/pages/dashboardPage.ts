@@ -10,6 +10,15 @@ export class DashboardPage extends HelperBase {
     'Products Per Category'
   )
   readonly latestUsersChartTitle = this.page.getByText('Latest Users')
+  readonly ordersPageLink = this.page.getByRole('link', {
+    name: 'Orders',
+  })
+  readonly productsPageLink = this.page.getByRole('link', {
+    name: 'Products',
+  })
+  readonly categoriesPageLink = this.page.getByRole('link', {
+    name: 'Categories',
+  })
 
   constructor(page: Page) {
     super(page)
@@ -33,5 +42,27 @@ export class DashboardPage extends HelperBase {
 
   async latestUsersChartCheck() {
     await expect(this.latestUsersChartTitle).toBeVisible()
+  }
+
+  async navigateToOrdersPage() {
+    await this.ordersPageLink.click()
+    await this.page.waitForURL('http://localhost:3000/admin/orders')
+    await expect(
+      this.page.getByText('Orders Management Dashboard')
+    ).toBeVisible()
+  }
+
+  async navigateToProductsPage() {
+    await this.productsPageLink.click()
+    await this.page.waitForURL('http://localhost:3000/admin/products')
+    await expect(this.page.getByText('Products Management')).toBeVisible()
+  }
+
+  async navigateToCategoriesPage() {
+    await this.categoriesPageLink.click()
+    await this.page.waitForURL('http://localhost:3000/admin/categories')
+    await expect(
+      this.page.getByRole('button', { name: 'Add Category' })
+    ).toBeVisible()
   }
 }
