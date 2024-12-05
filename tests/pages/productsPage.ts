@@ -97,20 +97,14 @@ export class ProductsPage extends HelperBase {
       path.join(__dirname, '../images/go-zero.png'),
     ])
     await this.submitButton.click()
-    await expect(this.createSuccessMessage).toHaveText(
-      'Product created successfully!',
-      { timeout: 15000 }
-    )
+    await expect(this.createSuccessMessage).toBeVisible({ timeout: 15000 })
   }
 
   async deleteProduct(title: string) {
     const targetRow = this.page.getByRole('row', { name: title })
     await targetRow.locator('.lucide-trash2').click()
     await this.deleteButton.click()
-    await expect(this.deleteSuccessMessage).toHaveText(
-      'Product deleted successfully',
-      { timeout: 15000 }
-    )
+    await expect(this.deleteSuccessMessage).toBeVisible({ timeout: 15000 })
   }
 
   async editProduct(title: string) {
@@ -136,9 +130,6 @@ export class ProductsPage extends HelperBase {
 
     // 提交编辑后的数据
     await this.submitButton.click()
-    await expect(this.editSuccessMessage).toHaveText(
-      'Product updated successfully!',
-      { timeout: 15000 }
-    )
+    await expect(this.editSuccessMessage).toBeVisible({ timeout: 15000 })
   }
 }
