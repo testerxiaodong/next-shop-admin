@@ -135,7 +135,7 @@ export default function Home() {
                   height={888}
                   src="/app-pics.png"
                   alt="GadgetApp Screenshot"
-                  className="rounded-3xl object-cover shadow-2xl mx-auto h-[500px] w-[250px]"
+                  className="rounded-3xl object-cover shadow-2xl mx-auto h-[533px] w-[250px]"
                   priority
                 />
                 <Badge className="absolute top-4 right-4 bg-[#1bc464] text-white">

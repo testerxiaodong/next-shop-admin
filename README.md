@@ -12,7 +12,7 @@
 
 ### 新增 supabase 数据表、触发器函数、存储过程、边缘函数
 
-supabase 不支持 pb_dump 导出数据表，推荐看视频博主的教程，教程有分段信息介绍：[https://www.youtube.com/watch?v=26opRFPU0a8](https://www.youtube.com/watch?v=26opRFPU0a8)
+supabase 不支持 pg_dump 导出数据表，推荐看视频博主的教程，教程有分段信息介绍：[https://www.youtube.com/watch?v=26opRFPU0a8](https://www.youtube.com/watch?v=26opRFPU0a8)
 
 ## 体验
 
