@@ -24,21 +24,25 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     // Setup project
-    { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    { name: 'setup', testMatch: /setup-admin\.setup\.ts/ },
+    // logout project
+    {
+      name: 'logout',
+      testMatch: /logout\.spec\.ts/,
+    },
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        storageState: 'tests/.auth/user.json',
+        storageState: 'tests/.auth/admin.json',
       },
       dependencies: ['setup'],
     },
-
     {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
-        storageState: 'tests/.auth/user.json',
+        storageState: 'tests/.auth/admin.json',
       },
       dependencies: ['setup'],
     },
@@ -47,7 +51,7 @@ export default defineConfig({
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
-        storageState: 'tests/.auth/user.json',
+        storageState: 'tests/.auth/admin.json',
       },
       dependencies: ['setup'],
     },
@@ -57,6 +61,6 @@ export default defineConfig({
     command: 'npm run build && npm run start',
     port: 3000,
     reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
+    timeout: 200 * 1000,
   },
 })

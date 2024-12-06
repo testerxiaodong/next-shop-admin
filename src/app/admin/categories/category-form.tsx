@@ -103,7 +103,9 @@ export const CategoryForm = ({
         try {
           return await imageUploadHandler(formData)
         } catch {
-          toast.error('Image upload failed!')
+          toast.error('Image upload failed!', {
+            position: 'top-right',
+          })
           return null
         }
       }
@@ -122,13 +124,17 @@ export const CategoryForm = ({
         imageUrl,
         slug: defaultValues?.slug || slug, // 如果已有 slug，则沿用；否则根据名称生成
       })
-      toast.success('Category updated successfully')
+      toast.success('Category updated successfully', {
+        position: 'top-right',
+      })
     } else {
       // 创建新分类
       const imageUrl = await handleImageUpload()
       if (imageUrl) {
         await createCategory({ imageUrl, name })
-        toast.success('Category created successfully')
+        toast.success('Category created successfully', {
+          position: 'top-right',
+        })
       }
     }
     form.reset()

@@ -58,9 +58,13 @@ export default function Auth() {
     } catch (error) {
       // 捕获到异常，提示异常中的错误信息
       if (error instanceof Error) {
-        toast.error(error.message)
+        toast.error(error.message, {
+          position: 'top-right',
+        })
       } else {
-        toast.error('An error occurred while authenticating')
+        toast.error('An error occurred while authenticating', {
+          position: 'top-right',
+        })
       }
     } finally {
       setIsAuthenticating(false)

@@ -2,19 +2,24 @@ import test from '../fixtures/pageFixtrue'
 import { faker } from '@faker-js/faker'
 
 test.describe('Products Page', () => {
-  test('navigateToDashboard', async ({ productsPage }) => {
+  test('navigate to dashboard page', async ({ productsPage }) => {
     await productsPage.navigate()
     await productsPage.navigateToDashboard()
   })
 
-  test('navigateToOrdersPage', async ({ productsPage }) => {
+  test('navigate to Orders page', async ({ productsPage }) => {
     await productsPage.navigate()
     await productsPage.navigateToOrdersPage()
   })
 
-  test('navigateToCategoriesPage', async ({ productsPage }) => {
+  test('navigate to categories page', async ({ productsPage }) => {
     await productsPage.navigate()
     await productsPage.navigateToCategoriesPage()
+  })
+
+  test('form validation error message', async ({ productsPage }) => {
+    await productsPage.navigate()
+    await productsPage.formValidationErrorMessages()
   })
 
   test('add new product', async ({ productsPage }) => {

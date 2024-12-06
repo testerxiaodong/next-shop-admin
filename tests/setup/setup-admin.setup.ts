@@ -1,12 +1,12 @@
 import { test as setup } from '@playwright/test'
 import path from 'path'
 
-const authFile = path.join(__dirname, '../.auth/user.json')
+const authFile = path.join(__dirname, '../.auth/admin.json')
 
 setup('authenticate', async ({ page }) => {
   // Perform authentication steps. Replace these actions with your own.
   await page.goto('/auth')
-  await page.getByLabel('Email').fill('test@test.com')
+  await page.getByLabel('Email').fill('test@admin.com')
   await page.getByLabel('Password').fill('123456')
   await page.getByText('Login').click()
   // Wait until the page receives the cookies.

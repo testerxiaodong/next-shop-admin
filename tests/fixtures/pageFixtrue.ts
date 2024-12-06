@@ -5,6 +5,7 @@ import { DashboardPage } from '../pages/dashboardPage'
 import { OrdersPage } from '../pages/ordersPage'
 import { ProductsPage } from '../pages/productsPage'
 import { CategoriesPage } from '../pages/categoriesPage'
+import { AdminLayout } from '../pages/adminLayout'
 
 const test = baseTest.extend<{
   homePage: HomePage
@@ -13,12 +14,16 @@ const test = baseTest.extend<{
   ordersPage: OrdersPage
   productsPage: ProductsPage
   categoriesPage: CategoriesPage
+  adminLayout: AdminLayout
 }>({
   homePage: async ({ page }, use) => {
     await use(new HomePage(page))
   },
   authPage: async ({ page }, use) => {
     await use(new AuthPage(page))
+  },
+  adminLayout: async ({ page }, use) => {
+    await use(new AdminLayout(page))
   },
   dashboardPage: async ({ page }, use) => {
     await use(new DashboardPage(page))

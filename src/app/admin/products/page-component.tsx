@@ -53,7 +53,9 @@ export const ProductPageComponent: FC<Props> = ({
     if (currentProduct?.slug) {
       await deleteProduct(currentProduct.slug)
       router.refresh()
-      toast.success('Product deleted successfully')
+      toast.success('Product deleted successfully', {
+        position: 'top-right',
+      })
       setIsDeleteModalOpen(false)
       setCurrentProduct(null)
     }

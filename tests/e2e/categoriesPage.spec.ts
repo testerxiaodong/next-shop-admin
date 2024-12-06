@@ -17,6 +17,11 @@ test.describe('Categories Page', () => {
     await categoriesPage.navigateToProducts()
   })
 
+  test('form validation error messages', async ({ categoriesPage }) => {
+    await categoriesPage.navigate()
+    await categoriesPage.formvalidationErrorMessages()
+  })
+
   test('add new category', async ({ categoriesPage }) => {
     const categoryName = faker.commerce.productName()
     await categoriesPage.navigate()

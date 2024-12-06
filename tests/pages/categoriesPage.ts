@@ -17,6 +17,10 @@ export class CategoriesPage extends HelperBase {
     name: 'Add Category',
   })
 
+  // 表单验证提示
+  readonly formValidationNameMessage = this.page.getByText('分类名称是必填项')
+  readonly formValidationImageMessage = this.page.getByText('Invalid url')
+
   // 分类名称输入框
   readonly categoryNameInput = this.page.getByLabel('Name')
 
@@ -74,6 +78,13 @@ export class CategoriesPage extends HelperBase {
     await this.productsPageLink.click()
     await this.page.waitForURL('http://localhost:3000/admin/products')
     await expect(this.page.getByText('Products Management')).toBeVisible()
+  }
+
+  async formvalidationErrorMessages() {
+    await this.addCategoryButton.click()
+    await this.submitButton.click()
+    await expect(this.formValidationNameMessage).toBeVisible()
+    await expect(this.formValidationImageMessage).toBeVisible()
   }
 
   async addCategory(name: string) {
