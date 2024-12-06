@@ -167,13 +167,17 @@ export const ProductForm = ({
 
       // 检查主图是否成功上传
       if (!uploadedHeroImage) {
-        toast.error('Failed to upload the hero image. Please try again.')
+        toast.error('Failed to upload the hero image. Please try again.', {
+          position: 'top-right',
+        })
         return
       }
 
       // 检查是否所有产品图片都成功上传
       if (uploadedImages.includes(null)) {
-        toast.error('Failed to upload some product images. Please try again.')
+        toast.error('Failed to upload some product images. Please try again.', {
+          position: 'top-right',
+        })
         return
       }
 
@@ -203,14 +207,19 @@ export const ProductForm = ({
       toast.success(
         isEditMode
           ? 'Product updated successfully!'
-          : 'Product created successfully!'
+          : 'Product created successfully!',
+        {
+          position: 'top-right',
+        }
       )
       form.reset() // 重置表单
       router.refresh() // 刷新页面
       setIsProductModalOpen(false) // 关闭模态框
     } catch (error) {
       console.error(error)
-      toast.error('Something went wrong. Please try again.')
+      toast.error('Something went wrong. Please try again.', {
+        position: 'top-right',
+      })
     }
   }
 

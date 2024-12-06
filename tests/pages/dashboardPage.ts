@@ -3,7 +3,7 @@ import { HelperBase } from './helperBase'
 
 export class DashboardPage extends HelperBase {
   readonly ordersChartTitle = this.page.getByText('Orders Over Time')
-  readonly productDistributionTitle = this.page.getByText(
+  readonly productDistributionChartTitle = this.page.getByText(
     'Product Distribution'
   )
   readonly productsPerCategoryChartTitle = this.page.getByText(
@@ -32,8 +32,8 @@ export class DashboardPage extends HelperBase {
     await expect(this.ordersChartTitle).toBeVisible()
   }
 
-  async productDistributionCheck() {
-    await expect(this.productDistributionTitle).toBeVisible()
+  async productDistributionChartCheck() {
+    await expect(this.productDistributionChartTitle).toBeVisible()
   }
 
   async productsPerCategoryChartCheck() {

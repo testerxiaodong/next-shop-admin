@@ -3,6 +3,7 @@ import { HelperBase } from './helperBase'
 import path from 'path'
 
 export class ProductsPage extends HelperBase {
+  // 导航链接
   readonly dashboardPageLink = this.page.getByRole('link', {
     name: 'Dashboard',
   })
@@ -12,6 +13,21 @@ export class ProductsPage extends HelperBase {
   readonly categoriesPageLink = this.page.getByRole('link', {
     name: 'Categories',
   })
+
+  // 表单验证提示信息
+  readonly titleRequiredMessage = this.page.getByText('Title is required')
+  readonly categoryRequiredMessage = this.page.getByText('Category is required')
+  readonly priceRequiredMessage = this.page.getByText('Price is required')
+  readonly maxQuantityRequiredMessage = this.page.getByText(
+    'Max Quantity is required'
+  )
+  readonly heroImageRequiredMessage = this.page.getByText(
+    'Hero Image is required'
+  )
+  readonly productsImageRequiredMessage = this.page.getByText(
+    'At least one image is required'
+  )
+
   // 添加产品按钮
   readonly addProductButton = this.page.getByRole('button', {
     name: 'Add Product',
@@ -76,6 +92,17 @@ export class ProductsPage extends HelperBase {
     await expect(
       this.page.getByRole('button', { name: 'Add Category' })
     ).toBeVisible()
+  }
+
+  async formValidationErrorMessages() {
+    await this.addProductButton.click()
+    await this.submitButton.click()
+    await expect(this.titleRequiredMessage).toBeVisible()
+    await expect(this.categoryRequiredMessage).toBeVisible()
+    await expect(this.priceRequiredMessage).toBeVisible()
+    await expect(this.maxQuantityRequiredMessage).toBeVisible()
+    await expect(this.heroImageRequiredMessage).toBeVisible()
+    await expect(this.productsImageRequiredMessage).toBeVisible()
   }
 
   async addProduct(

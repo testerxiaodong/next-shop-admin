@@ -28,10 +28,10 @@ export const updateOrderStatus = async (orderId: number, status: string) => {
 
   // 查询用户信息：userId
   const {
-    data: { session },
-  } = await supabase.auth.getSession()
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  const userId = session?.user.id
+  const userId = user?.id
 
   if (!userId) throw new Error('User not found')
 

@@ -60,9 +60,13 @@ export const CategoryTableRow = ({
     // 删除分类
     try {
       await deleteCategory(id)
-      toast.success('Category deleted successfully')
+      toast.success('Category deleted successfully', {
+        position: 'top-right',
+      })
     } catch {
-      toast.error('Failed to delete category')
+      toast.error('Failed to delete category', {
+        position: 'top-right',
+      })
     }
 
     // 刷新页面

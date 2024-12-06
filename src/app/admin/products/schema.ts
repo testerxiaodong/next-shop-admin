@@ -5,11 +5,11 @@ export const createOrUpdateProductSchema = z.object({
   price: z
     .number()
     .int({ message: 'Price must be an integer' })
-    .min(0, { message: 'Price must be a positive integer' }),
+    .positive({ message: 'Price is required' }),
   maxQuantity: z
     .number()
     .int({ message: 'Max Quantity must be an integer' })
-    .min(0, { message: 'Max Quantity must be a positive integer' }),
+    .positive({ message: 'Max Quantity is required' }),
   category: z.string().min(1, { message: 'Category is required' }),
   heroImage: z
     .union([
