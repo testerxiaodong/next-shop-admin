@@ -1,4 +1,4 @@
-import test from '../fixtures/pageFixtrue'
+import { test } from '../fixtures/pageFixtrue'
 import { faker } from '@faker-js/faker'
 
 test.describe('Categories Page', () => {

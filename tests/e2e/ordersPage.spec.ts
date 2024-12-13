@@ -1,4 +1,4 @@
-import test from '../fixtures/pageFixtrue'
+import { test } from '../fixtures/pageFixtrue'
 
 test.describe('Orders Page', () => {
   test('navigateToDashboard', async ({ ordersPage }) => {

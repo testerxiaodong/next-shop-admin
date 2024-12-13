@@ -7,7 +7,7 @@ import { ProductsPage } from '../pages/productsPage'
 import { CategoriesPage } from '../pages/categoriesPage'
 import { AdminLayout } from '../pages/adminLayout'
 
-const test = baseTest.extend<{
+export const test = baseTest.extend<{
   homePage: HomePage
   authPage: AuthPage
   dashboardPage: DashboardPage
@@ -38,5 +38,3 @@ const test = baseTest.extend<{
     await use(new CategoriesPage(page))
   },
 })
-
-export default test

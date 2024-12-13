@@ -1,4 +1,4 @@
-import test from '../fixtures/pageFixtrue'
+import { test } from '../fixtures/pageFixtrue'
 
 test.describe('Home page', () => {
   test('home page header show', async ({ homePage }) => {

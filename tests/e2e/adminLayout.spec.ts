@@ -1,4 +1,4 @@
-import test from '../fixtures/pageFixtrue'
+import { test } from '../fixtures/pageFixtrue'
 
 test.describe('admin layout common functions', () => {
   test('should toggle light theme', async ({ adminLayout }) => {

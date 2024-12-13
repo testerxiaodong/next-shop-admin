@@ -1,4 +1,4 @@
-import test from '../fixtures/pageFixtrue'
+import { test } from '../fixtures/pageFixtrue'
 
 test.describe('Auth Page', () => {
   // 表单验证错误信息验证

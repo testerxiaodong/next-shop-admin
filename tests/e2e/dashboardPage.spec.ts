@@ -1,4 +1,4 @@
-import test from '../fixtures/pageFixtrue'
+import { test } from '../fixtures/pageFixtrue'
 
 test.describe('Dashboard Page', () => {
   test('ordersc chart check', async ({ dashboardPage }) => {

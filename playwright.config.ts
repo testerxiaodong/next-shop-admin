@@ -30,8 +30,18 @@ export default defineConfig({
       name: 'logout',
       testMatch: /logout\.spec\.ts/,
     },
+    // lighthouse
+    {
+      name: 'lighthouse',
+      testMatch: /lighthouse\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
+      dependencies: ['setup'],
+    },
     {
       name: 'chromium',
+      testIgnore: /lighthouse\.spec\.ts/, // 忽略 Lighthouse 测试
       use: {
         ...devices['Desktop Chrome'],
         storageState: 'tests/.auth/admin.json',
@@ -40,6 +50,7 @@ export default defineConfig({
     },
     {
       name: 'firefox',
+      testIgnore: /lighthouse\.spec\.ts/, // 忽略 Lighthouse 测试
       use: {
         ...devices['Desktop Firefox'],
         storageState: 'tests/.auth/admin.json',
@@ -49,6 +60,7 @@ export default defineConfig({
 
     {
       name: 'webkit',
+      testIgnore: /lighthouse\.spec\.ts/, // 忽略 Lighthouse 测试
       use: {
         ...devices['Desktop Safari'],
         storageState: 'tests/.auth/admin.json',
