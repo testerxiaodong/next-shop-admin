@@ -1,33 +1,40 @@
-import { expect, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 import { HelperBase } from './helperBase'
 import { getRandomElement } from '../lib/utils'
 
 export class AdminLayout extends HelperBase {
-  readonly allLinksInAdminLayout = [
-    '/admin/dashboard',
-    '/admin/orders',
-    '/admin/products',
-    '/admin/categories',
-  ]
-  readonly userProfileButton = this.page.getByRole('button', {
-    name: 'Toggle user menu',
-  })
-  readonly logoutButton = this.page.getByRole('menuitem', { name: 'Logout' })
-  readonly toggleThemeButton = this.page.getByRole('button', {
-    name: 'Toggle theme',
-  })
-  readonly lightThemeButton = this.page.getByRole('menuitem', {
-    name: 'Light',
-  })
-  readonly darkThemeButton = this.page.getByRole('menuitem', {
-    name: 'Dark',
-  })
-  readonly systemThemeButton = this.page.getByRole('menuitem', {
-    name: 'System',
-  })
+  readonly allLinksInAdminLayout: string[]
+  readonly userProfileButton: Locator
+  readonly logoutButton: Locator
+  readonly toggleThemeButton: Locator
+  readonly lightThemeButton: Locator
+  readonly darkThemeButton: Locator
+  readonly systemThemeButton: Locator
 
   constructor(page: Page) {
     super(page)
+    this.allLinksInAdminLayout = [
+      '/admin/dashboard',
+      '/admin/orders',
+      '/admin/products',
+      '/admin/categories',
+    ]
+    this.userProfileButton = this.page.getByRole('button', {
+      name: 'Toggle user menu',
+    })
+    this.logoutButton = this.page.getByRole('menuitem', { name: 'Logout' })
+    this.toggleThemeButton = this.page.getByRole('button', {
+      name: 'Toggle theme',
+    })
+    this.lightThemeButton = this.page.getByRole('menuitem', {
+      name: 'Light',
+    })
+    this.darkThemeButton = this.page.getByRole('menuitem', {
+      name: 'Dark',
+    })
+    this.systemThemeButton = this.page.getByRole('menuitem', {
+      name: 'System',
+    })
   }
 
   async navigateToRadomPage() {

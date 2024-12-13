@@ -1,59 +1,65 @@
-import { expect, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 import { HelperBase } from './helperBase'
 import path from 'path'
 
 export class CategoriesPage extends HelperBase {
-  readonly dashboardPageLink = this.page.getByRole('link', {
-    name: 'Dashboard',
-  })
-  readonly ordersPageLink = this.page.getByRole('link', {
-    name: 'Orders',
-  })
-  readonly productsPageLink = this.page.getByRole('link', {
-    name: 'Products',
-  })
+  readonly dashboardPageLink: Locator
+  readonly ordersPageLink: Locator
+  readonly productsPageLink: Locator
   // 添加分类按钮
-  readonly addCategoryButton = this.page.getByRole('button', {
-    name: 'Add Category',
-  })
-
+  readonly addCategoryButton: Locator
   // 表单验证提示
-  readonly formValidationNameMessage = this.page.getByText('分类名称是必填项')
-  readonly formValidationImageMessage = this.page.getByText('Invalid url')
-
+  readonly formValidationNameMessage: Locator
+  readonly formValidationImageMessage: Locator
   // 分类名称输入框
-  readonly categoryNameInput = this.page.getByLabel('Name')
-
+  readonly categoryNameInput: Locator
   // 分类图片上传控件
-  readonly categoryImageInput = this.page.getByLabel('Image')
-
+  readonly categoryImageInput: Locator
   // 提交按钮
-  readonly submitButton = this.page.getByRole('button', {
-    name: 'Submit',
-  })
-
+  readonly submitButton: Locator
   // 新增分类成功提示
-  readonly createSuccessMessage = this.page.getByText(
-    'Category created successfully'
-  )
-
+  readonly createSuccessMessage: Locator
   // 确认删除按钮
-  readonly confirmDeleteButton = this.page.getByRole('button', {
-    name: 'Confirm Delete',
-  })
-
+  readonly confirmDeleteButton: Locator
   // 删除分类成功提示
-  readonly deleteSuccessMessage = this.page.getByText(
-    'Category deleted successfully'
-  )
-
+  readonly deleteSuccessMessage: Locator
   // 编辑成功提示
-  readonly editSuccessMessage = this.page.getByText(
-    'Category updated successfully'
-  )
+  readonly editSuccessMessage: Locator
 
   constructor(page: Page) {
     super(page)
+    this.dashboardPageLink = this.page.getByRole('link', {
+      name: 'Dashboard',
+    })
+    this.ordersPageLink = this.page.getByRole('link', {
+      name: 'Orders',
+    })
+    this.productsPageLink = this.page.getByRole('link', {
+      name: 'Products',
+    })
+    // 添加分类按钮
+    this.addCategoryButton = this.page.getByRole('button', {
+      name: 'Add Category',
+    })
+    this.formValidationNameMessage = this.page.getByText('分类名称是必填项')
+    this.formValidationImageMessage = this.page.getByText('Invalid url')
+    this.categoryNameInput = this.page.getByLabel('Name')
+    this.categoryImageInput = this.page.getByLabel('Image')
+    this.submitButton = this.page.getByRole('button', {
+      name: 'Submit',
+    })
+    this.createSuccessMessage = this.page.getByText(
+      'Category created successfully'
+    )
+    this.confirmDeleteButton = this.page.getByRole('button', {
+      name: 'Confirm Delete',
+    })
+    this.deleteSuccessMessage = this.page.getByText(
+      'Category deleted successfully'
+    )
+    this.editSuccessMessage = this.page.getByText(
+      'Category updated successfully'
+    )
   }
 
   async navigate() {

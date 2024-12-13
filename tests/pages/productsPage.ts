@@ -1,71 +1,93 @@
-import { Page, expect } from '@playwright/test'
+import { Locator, Page, expect } from '@playwright/test'
 import { HelperBase } from './helperBase'
 import path from 'path'
 
 export class ProductsPage extends HelperBase {
   // 导航链接
-  readonly dashboardPageLink = this.page.getByRole('link', {
-    name: 'Dashboard',
-  })
-  readonly ordersPageLink = this.page.getByRole('link', {
-    name: 'Orders',
-  })
-  readonly categoriesPageLink = this.page.getByRole('link', {
-    name: 'Categories',
-  })
+  readonly dashboardPageLink: Locator
+  readonly ordersPageLink: Locator
+  readonly categoriesPageLink: Locator
 
   // 表单验证提示信息
-  readonly titleRequiredMessage = this.page.getByText('Title is required')
-  readonly categoryRequiredMessage = this.page.getByText('Category is required')
-  readonly priceRequiredMessage = this.page.getByText('Price is required')
-  readonly maxQuantityRequiredMessage = this.page.getByText(
-    'Max Quantity is required'
-  )
-  readonly heroImageRequiredMessage = this.page.getByText(
-    'Hero Image is required'
-  )
-  readonly productsImageRequiredMessage = this.page.getByText(
-    'At least one image is required'
-  )
+  readonly titleRequiredMessage: Locator
+  readonly categoryRequiredMessage: Locator
+  readonly priceRequiredMessage: Locator
+  readonly maxQuantityRequiredMessage: Locator
+  readonly heroImageRequiredMessage: Locator
+  readonly productsImageRequiredMessage: Locator
 
   // 添加产品按钮
-  readonly addProductButton = this.page.getByRole('button', {
-    name: 'Add Product',
-  })
+  readonly addProductButton: Locator
   // 产品名称输入框
-  readonly productTitleInput = this.page.getByLabel('Title')
+  readonly productTitleInput: Locator
   // 产品分类下拉框
-  readonly productCategorySelect = this.page.getByRole('combobox')
+  readonly productCategorySelect: Locator
   // 产品价格输入框
-  readonly productPriceInput = this.page.locator('#price')
+  readonly productPriceInput: Locator
   // 产品最大库存量输入框
-  readonly productMaxQuantityInput = this.page.locator('#maxQuantity')
+  readonly productMaxQuantityInput: Locator
   // 产品主图上传
-  readonly heroImageInput = this.page.getByLabel('Hero Image')
+  readonly heroImageInput: Locator
   // 产品详情图上传
-  readonly productsImageInput = this.page.getByLabel('Product Images')
+  readonly productsImageInput: Locator
   // 提交按钮
-  readonly submitButton = this.page.getByRole('button', {
-    name: 'Submit',
-  })
+  readonly submitButton: Locator
   // 添加成功提示
-  readonly createSuccessMessage = this.page.getByText(
-    'Product created successfully!'
-  )
+  readonly createSuccessMessage: Locator
   // 删除按钮
-  readonly deleteButton = this.page.getByRole('button', {
-    name: 'Delete',
-  })
+  readonly deleteButton: Locator
   // 删除成功提示
-  readonly deleteSuccessMessage = this.page.getByText(
-    'Product deleted successfully'
-  )
+  readonly deleteSuccessMessage: Locator
   // 编辑成功提示
-  readonly editSuccessMessage = this.page.getByText(
-    'Product updated successfully!'
-  )
+  readonly editSuccessMessage: Locator
+
   constructor(page: Page) {
     super(page)
+    this.dashboardPageLink = this.page.getByRole('link', {
+      name: 'Dashboard',
+    })
+    this.ordersPageLink = this.page.getByRole('link', {
+      name: 'Orders',
+    })
+    this.categoriesPageLink = this.page.getByRole('link', {
+      name: 'Categories',
+    })
+    this.titleRequiredMessage = this.page.getByText('Title is required')
+    this.categoryRequiredMessage = this.page.getByText('Category is required')
+    this.priceRequiredMessage = this.page.getByText('Price is required')
+    this.maxQuantityRequiredMessage = this.page.getByText(
+      'Max Quantity is required'
+    )
+    this.heroImageRequiredMessage = this.page.getByText(
+      'Hero Image is required'
+    )
+    this.productsImageRequiredMessage = this.page.getByText(
+      'At least one image is required'
+    )
+    this.addProductButton = this.page.getByRole('button', {
+      name: 'Add Product',
+    })
+    this.productTitleInput = this.page.getByLabel('Title')
+    this.productCategorySelect = this.page.getByRole('combobox')
+    this.productPriceInput = this.page.locator('#price')
+    this.productMaxQuantityInput = this.page.locator('#maxQuantity')
+    this.heroImageInput = this.page.getByLabel('Hero Image')
+    this.productsImageInput = this.page.getByLabel('Product Images')
+    this.submitButton = this.page.getByRole('button', {
+      name: 'Submit',
+    })
+    this.createSuccessMessage = this.page.getByText(
+      'Product created successfully!'
+    )
+    this.deleteButton = this.page.getByRole('button', {
+      name: 'Delete',
+    })
+    this.deleteSuccessMessage = this.page.getByText(
+      'Product deleted successfully'
+    )
+    this.editSuccessMessage = this.page.getByText(
+      'Product updated successfully!'
+    )
   }
 
   async navigate() {

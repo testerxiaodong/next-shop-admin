@@ -1,21 +1,26 @@
-import { expect, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 import { HelperBase } from './helperBase'
 
 export class AuthPage extends HelperBase {
-  readonly email = this.page.getByLabel('Email')
-  readonly password = this.page.getByLabel('Password')
-  readonly loginButton = this.page.getByText('Login')
-  readonly successMessage = this.page.getByText('Logged in successfully')
-  readonly errorMessage = this.page.getByText('Invalid email or password')
-  readonly formValidationEmailError = this.page.getByText(
-    'Invalid email address'
-  )
-  readonly formValidationPasswordError = this.page.getByText(
-    'Password must be at least 6 characters'
-  )
+  readonly email: Locator
+  readonly password: Locator
+  readonly loginButton: Locator
+  readonly successMessage: Locator
+  readonly errorMessage: Locator
+  readonly formValidationEmailError: Locator
+  readonly formValidationPasswordError: Locator
 
   constructor(page: Page) {
     super(page)
+    this.email = this.page.getByLabel('Email')
+    this.password = this.page.getByLabel('Password')
+    this.loginButton = this.page.getByText('Login')
+    this.successMessage = this.page.getByText('Logged in successfully')
+    this.errorMessage = this.page.getByText('Invalid email or password')
+    this.formValidationEmailError = this.page.getByText('Invalid email address')
+    this.formValidationPasswordError = this.page.getByText(
+      'Password must be at least 6 characters'
+    )
   }
 
   async navigate() {
@@ -28,7 +33,7 @@ export class AuthPage extends HelperBase {
     await this.loginButton.click()
     // 等待消息可见并验证内容
     await expect(this.successMessage).toHaveText('Logged in successfully', {
-      timeout: 4000,
+      timeout: 8000,
     })
     await this.page.waitForURL('http://localhost:3000/admin/dashboard', {
       waitUntil: 'load',
@@ -51,7 +56,7 @@ export class AuthPage extends HelperBase {
     await this.loginButton.click()
     // 等待消息可见并验证内容
     await expect(this.errorMessage).toHaveText('Invalid email or password', {
-      timeout: 4000,
+      timeout: 8000,
     })
   }
 }

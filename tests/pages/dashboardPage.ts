@@ -1,27 +1,34 @@
-import { expect, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 import { HelperBase } from './helperBase'
 
 export class DashboardPage extends HelperBase {
-  readonly ordersChartTitle = this.page.getByText('Orders Over Time')
-  readonly productDistributionChartTitle = this.page.getByText(
-    'Product Distribution'
-  )
-  readonly productsPerCategoryChartTitle = this.page.getByText(
-    'Products Per Category'
-  )
-  readonly latestUsersChartTitle = this.page.getByText('Latest Users')
-  readonly ordersPageLink = this.page.getByRole('link', {
-    name: 'Orders',
-  })
-  readonly productsPageLink = this.page.getByRole('link', {
-    name: 'Products',
-  })
-  readonly categoriesPageLink = this.page.getByRole('link', {
-    name: 'Categories',
-  })
+  readonly ordersChartTitle: Locator
+  readonly productDistributionChartTitle: Locator
+  readonly productsPerCategoryChartTitle: Locator
+  readonly latestUsersChartTitle: Locator
+  readonly ordersPageLink: Locator
+  readonly productsPageLink: Locator
+  readonly categoriesPageLink: Locator
 
   constructor(page: Page) {
     super(page)
+    this.ordersChartTitle = this.page.getByText('Orders Over Time')
+    this.productDistributionChartTitle = this.page.getByText(
+      'Product Distribution'
+    )
+    this.productsPerCategoryChartTitle = this.page.getByText(
+      'Products Per Category'
+    )
+    this.latestUsersChartTitle = this.page.getByText('Latest Users')
+    this.ordersPageLink = this.page.getByRole('link', {
+      name: 'Orders',
+    })
+    this.productsPageLink = this.page.getByRole('link', {
+      name: 'Products',
+    })
+    this.categoriesPageLink = this.page.getByRole('link', {
+      name: 'Categories',
+    })
   }
 
   async navigate() {

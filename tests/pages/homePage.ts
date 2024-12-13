@@ -7,8 +7,8 @@ export class HomePage extends HelperBase {
 
   constructor(page: Page) {
     super(page)
-    this.appHeader = page.locator('h1', { hasText: 'GadgetApp' })
-    this.githubLink = page.getByText('@ cengdong')
+    this.appHeader = this.page.locator('h1', { hasText: 'GadgetApp' })
+    this.githubLink = this.page.getByText('@ cengdong')
   }
 
   async navigate() {

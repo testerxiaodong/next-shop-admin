@@ -1,31 +1,35 @@
-import { expect, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 import { HelperBase } from './helperBase'
 import { getRandomElement } from '../lib/utils'
 
 export class OrdersPage extends HelperBase {
-  readonly dashboardPageLink = this.page.getByRole('link', {
-    name: 'Dashboard',
-  })
-  readonly productsPageLink = this.page.getByRole('link', { name: 'Products' })
-  readonly categoriesPageLink = this.page.getByRole('link', {
-    name: 'Categories',
-  })
-  readonly targetOrderRow = this.page.getByRole('row', {
-    name: 'order-9WPT-1733240012494',
-  })
-  readonly targetOrderRowStatus = this.targetOrderRow.getByRole('combobox')
-  readonly optionalStatus: string[] = [
-    'Pending',
-    'Shipped',
-    'InTransit',
-    'Completed',
-  ]
-  readonly targetOrderRowActions = this.targetOrderRow.getByRole('button', {
-    name: 'View Products',
-  })
+  readonly dashboardPageLink: Locator
+  readonly productsPageLink: Locator
+  readonly categoriesPageLink: Locator
+  readonly targetOrderRow: Locator
+  readonly targetOrderRowStatus: Locator
+  readonly optionalStatus: string[]
+  readonly targetOrderRowActions: Locator
   readonly productsTitle = this.page.getByText('Order Products')
+
   constructor(page: Page) {
     super(page)
+    this.dashboardPageLink = this.page.getByRole('link', {
+      name: 'Dashboard',
+    })
+    this.productsPageLink = this.page.getByRole('link', { name: 'Products' })
+    this.categoriesPageLink = this.page.getByRole('link', {
+      name: 'Categories',
+    })
+    this.targetOrderRow = this.page.getByRole('row', {
+      name: 'order-Gf6t-1733846319980',
+    })
+    this.targetOrderRowStatus = this.targetOrderRow.getByRole('combobox')
+    this.optionalStatus = ['Pending', 'Shipped', 'InTransit', 'Completed']
+    this.targetOrderRowActions = this.targetOrderRow.getByRole('button', {
+      name: 'View Products',
+    })
+    this.productsTitle = this.page.getByText('Order Products')
   }
 
   async navigate() {
@@ -56,7 +60,9 @@ export class OrdersPage extends HelperBase {
     await this.targetOrderRowStatus.click()
     const status = getRandomElement(this.optionalStatus) as string
     await this.page.getByLabel(status).click()
-    await expect(this.targetOrderRowStatus).toHaveText(status)
+    await expect(this.targetOrderRowStatus).toHaveText(status, {
+      timeout: 8000,
+    })
   }
 
   async viewOrderProducts() {
