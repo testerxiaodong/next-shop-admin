@@ -1,4 +1,4 @@
-import { Page, test as base } from '@playwright/test'
+import { Page, test as base, expect as baseExpect } from '@playwright/test'
 import fs from 'fs'
 
 type LighthouseCategories = Partial<{
@@ -16,6 +16,35 @@ const defaultThresholds: LighthouseCategories = {
   seo: 0.9,
   pwa: 0.9,
 }
+
+// 扩展性能阈值断言函数
+const expect = baseExpect.extend({
+  toMatchThresholds(
+    received: LighthouseCategories,
+    expected: LighthouseCategories
+  ) {
+    // 比较期望的阈值以及测试结果分数
+    const pass = Object.entries(expected).every(([category, threshold]) => {
+      const receivedScore = received[category as keyof LighthouseCategories]
+      return (receivedScore || 0) >= threshold
+    })
+    const message = pass
+      ? () =>
+          `Expected: ${this.utils.printExpected(
+            expected
+          )}\nReceived: ${this.utils.printReceived(received)}`
+      : () =>
+          `Expected: ${this.utils.printExpected(
+            expected
+          )}\nReceived: ${this.utils.printReceived(
+            received
+          )}\n\n${this.utils.diff(expected, received)}`
+    return {
+      message,
+      pass,
+    }
+  },
+})
 
 export const test = base.extend<{
   lighthouse: (
@@ -36,26 +65,61 @@ export const test = base.extend<{
         extraHeaders?: Record<string, string>
       }
     ) {
+      // 合并阈值配置
       const thresholds: LighthouseCategories =
         options?.thresholds || defaultThresholds
       const categories = Object.keys(thresholds)
-
+      // 调用lighthouseApi
       const { default: lighthouse } = await import('lighthouse')
-
-      const runnerResult = await lighthouse(page.url(), {
-        port: 9222,
-        logLevel: 'error',
-        onlyCategories: categories,
-        output: 'html',
-        extraHeaders: options?.extraHeaders,
-      })
+      const runnerResult = await lighthouse(
+        page.url(),
+        // Flags
+        {
+          port: 9222,
+          logLevel: 'error',
+          onlyCategories: categories,
+          output: 'html',
+          extraHeaders: options?.extraHeaders,
+        },
+        // Config
+        {
+          extends: 'lighthouse:default',
+          // 为了能得到较高分数，使用桌面端，提高网络配置
+          settings: {
+            formFactor: 'desktop',
+            screenEmulation: {
+              mobile: false,
+              width: 1920,
+              height: 1080,
+              deviceScaleFactor: 1,
+              disabled: false,
+            },
+            throttling: {
+              rttMs: 40,
+              throughputKbps: 10240,
+              cpuSlowdownMultiplier: 1,
+            },
+          },
+        }
+      )
 
       if (!runnerResult) throw new Error('Lighthouse failed to run')
+      // 把结果写入文件
       const reportHtml = Array.isArray(runnerResult.report)
-        ? runnerResult.report.join('') // 将数组连接成字符串
-        : runnerResult.report // 如果是字符串，直接使用
-
+        ? runnerResult.report.join('')
+        : runnerResult.report
       fs.writeFileSync(`lighthouse-report/${reportFileName}.html`, reportHtml)
+      // 阈值断言
+      const categoriesScores: LighthouseCategories = Object.entries(
+        runnerResult.lhr.categories
+      ).reduce((acc, curr) => {
+        if (!thresholds[curr[0] as keyof LighthouseCategories]) return acc
+        const category = curr[0] as keyof LighthouseCategories
+        acc[category] = curr[1].score ?? undefined
+        return acc
+      }, {} as LighthouseCategories)
+      console.log('categoriesScores: ', categoriesScores)
+      expect(categoriesScores).toMatchThresholds(thresholds)
     }
 
     await use(loadLighthouse)
