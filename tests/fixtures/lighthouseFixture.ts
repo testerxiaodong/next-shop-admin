@@ -17,7 +17,7 @@ const defaultThresholds: LighthouseCategories = {
   pwa: 0.9,
 }
 
-// 扩展性能阈值断言函数
+// 扩展性能阈值断言的expect函数
 const expect = baseExpect.extend({
   toMatchThresholds(
     received: LighthouseCategories,
@@ -57,6 +57,12 @@ export const test = base.extend<{
   ) => Promise<void>
 }>({
   lighthouse: async ({}, use) => {
+    /**
+     *
+     * @param page 传入的Playwright.Page实例
+     * @param reportFileName 想要写入的报告名称
+     * @param options 阈值以及额外的头部(用于身份认证)
+     */
     async function loadLighthouse(
       page: Page,
       reportFileName: string,
