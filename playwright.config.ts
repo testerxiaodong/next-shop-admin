@@ -30,7 +30,7 @@ export default defineConfig({
       name: 'logout',
       testMatch: /logout\.spec\.ts/,
     },
-    // lighthouse
+    // lighthouse，只运行在Chrome浏览器
     {
       name: 'lighthouse',
       testMatch: /lighthouse\.spec\.ts/,

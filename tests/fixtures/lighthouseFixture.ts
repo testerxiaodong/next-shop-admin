@@ -75,6 +75,13 @@ export const test = base.extend<{
       const thresholds: LighthouseCategories =
         options?.thresholds || defaultThresholds
       const categories = Object.keys(thresholds)
+
+      // 确保lighthouse-report目录存在
+      const reportDir = 'lighthouse-report'
+      if (!fs.existsSync(reportDir)) {
+        fs.mkdirSync(reportDir, { recursive: true })
+      }
+
       // 调用lighthouseApi
       const { default: lighthouse } = await import('lighthouse')
       const runnerResult = await lighthouse(
